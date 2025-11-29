@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Quality Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+    <div style="height: 90px;"></div>
+
+    <nav class="navbar">
+    <div class="logo">
+        💧 Water Quality Prediction
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/predict">Predict</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+    </ul>
+</nav>
+
+
+    <div class="main-content">
+        <h1>Welcome to the Water Quality Prediction Dashboard</h1>
+        <p>This system predicts whether water is safe for drinking using AI and Machine Learning.</p>
+        <a href="/predict_page" class="button">Start Prediction</a>
+
+
+    </div>
+    <footer>
+  © 2025 Water Quality Prediction | Developed by Sonal (Engineer Ace)
+</footer>
+
+</body>
+</html>

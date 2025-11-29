@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Quality Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div style="height: 90px;"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+    <div class="logo">
+        💧 Water Quality Prediction
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/predict">Predict</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+    </ul>
+</nav>
+
+
+    <!-- FORM SECTION -->
+    <div class="form-container">
+        <h1>🔹 Enter Water Parameters</h1>
+        <p>Fill in all values below and click <b>Predict</b> to check drinkability.</p>
+
+        <form action="/predict" method="POST" class="predict-form">
+            <div class="grid-container">
+                <input type="text" name="ph" placeholder="pH Value" required>
+                <input type="text" name="Hardness" placeholder="Hardness" required>
+                <input type="text" name="Solids" placeholder="Solids" required>
+                <input type="text" name="Chloramines" placeholder="Chloramines" required>
+                <input type="text" name="Sulfate" placeholder="Sulfate" required>
+                <input type="text" name="Conductivity" placeholder="Conductivity" required>
+                <input type="text" name="Organic_carbon" placeholder="Organic Carbon" required>
+                <input type="text" name="Trihalomethanes" placeholder="Trihalomethanes" required>
+                <input type="text" name="Turbidity" placeholder="Turbidity" required>
+            </div>
+            <button type="submit" class="predict-btn">Predict</button>
+        </form>
+
+        {% if prediction_text %}
+            <h2 class="result">{{ prediction_text }}</h2>
+        {% endif %}
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2025 Water Quality Prediction | Developed by Sonal (Engineer Ace)</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Messages - Water Quality Project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div style="height: 90px;"></div>
+
+    <nav class="navbar">
+    <div class="logo">
+        💧 Water Quality Prediction
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/predict">Predict</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+    </ul>
+</nav>
+
+
+    <div class="messages-container">
+        <h3>Received Messages</h3>
+        {% if messages %}
+            <table border="1" cellspacing="0" cellpadding="10">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                </tr>
+                {% for msg in messages %}
+                <tr>
+                    <td>{{ msg.name }}</td>
+                    <td>{{ msg.email }}</td>
+                    <td>{{ msg.message }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No messages received yet.</p>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>© 2025 Water Quality Prediction | Developed by Sonal (Engineer Ace)</p>
+    </footer>
+</body>
+</html>

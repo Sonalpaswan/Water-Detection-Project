@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #d4f1f9, #b7e4f9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .result-container {
+            background: white;
+            padding: 40px 60px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .result-container h1 {
+            color: #004b8d;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .result-container h2 {
+            font-size: 22px;
+            margin: 10px 0;
+            transition: 0.3s ease;
+        }
+
+        .result-container p {
+            font-size: 16px;
+            color: #333;
+        }
+
+        ul {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        ul li {
+            font-size: 15px;
+            margin: 5px 0;
+            color: #444;
+        }
+
+        .button {
+            display: inline-block;
+            margin: 20px 10px 0;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 10px;
+            background-color: #0077b6;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #023e8a;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+    <div style="height: 90px;"></div>
+
+    <nav class="navbar">
+    <div class="logo">
+        💧 Water Quality Prediction
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/predict">Predict</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+    </ul>
+</nav>
+
+    <div class="result-container">
+        <h1>💧 Water Quality Prediction Result</h1>
+        <h2 style="color: {{ color }}">{{ prediction_text }}</h2>
+        <p><b>Confidence Score:</b> {{ score }}%</p>
+
+        <h3 style="color:#004b8d;">WHO Safe Limits</h3>
+        <ul>
+            {% for key, value in limits.items() %}
+                <li><b>{{ key }}:</b> {{ value }}</li>
+            {% endfor %}
+        </ul>
+
+        <a href="/predict_page" class="button">🔄 Try Again</a>
+        <a href="/" class="button">🏠 Home</a>
+    </div>
+</body>
+</html>

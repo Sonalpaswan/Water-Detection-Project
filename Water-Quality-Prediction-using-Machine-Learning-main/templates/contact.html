@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Water Quality Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div style="height: 90px;"></div>
+
+    <nav class="navbar">
+    <div class="logo">
+        💧 Water Quality Prediction
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/predict">Predict</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+    </ul>
+</nav>
+
+    <section class="contact-container">
+        <div class="contact-card">
+            <h1>📩 Contact the Developer</h1>
+            <p>If you have suggestions, project collaboration ideas, or feedback, feel free to reach out using the form below.</p>
+
+            <form action="/send_message" method="POST" class="contact-form">
+                <input type="text" name="name" placeholder="Your Full Name" required>
+                <input type="email" name="email" placeholder="Your Email Address" required>
+                <textarea name="message" rows="5" placeholder="Write your message here..." required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+            {% if success_message %}
+    <p style="color: green; font-weight: bold; margin-top: 10px;">{{ success_message }}</p>
+{% endif %}
+{% if error_message %}
+    <p style="color: red; font-weight: bold; margin-top: 10px;">{{ error_message }}</p>
+{% endif %}
+
+
+            <div class="developer-info">
+                <p>👩‍💻 <strong>Sonal (Engineer Ace)</strong> | IET, DDU Gorakhpur</p>
+                <p>📧 sonal@ietddu.edu.in</p>
+                <p>🌐 <p>🌐 
+                    <p>
+  🔗 <a href="https://www.linkedin.com/in/sonal-paswan-ab7694273" target="_blank">LinkedIn</a> |
+  🐙 <a href="https://github.com/Sonalpaswan" target="_blank">GitHub</a>
+</p>
+
+  <a href="https://www.linkedin.com/in/sonalpaswan16" target="_blank">LinkedIn</a> |
+  <a href="https://github.com/sonalpaswan16" target="_blank">GitHub</a>
+</p>
+
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        © 2025 Water Quality Prediction | Developed by Sonal (Engineer Ace)
+    </footer>
+</body>
+</html>
