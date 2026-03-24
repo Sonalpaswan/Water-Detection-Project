@@ -1,49 +1,49 @@
 from flask import Flask, render_template, request
-from flask import Flask, render_template, request
 import joblib
 import numpy as np
 import csv
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-
-import joblib
-import numpy as np
+import os
 
 # Initialize Flask App
 app = Flask(__name__, static_folder='static', template_folder='templates')
 
-# Load trained model
-model = joblib.load('water_model.pkl')
+# ✅ Safe Model Loading (IMPORTANT for Render)
+model = None
+model_path = os.path.join(os.path.dirname(__file__), "water_model.pkl")
 
+if os.path.exists(model_path):
+    model = joblib.load(model_path)
+    print("✅ Model loaded successfully")
+else:
+    print("❌ Model file not found")
 
 # Home Page
 @app.route('/')
 def home():
     return render_template('index.html')
 
-
 # Predict Page
 @app.route('/predict_page')
 def predict_page():
     return render_template('predict.html')
 
-
 # Prediction Logic
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Read all input values from form
+        if model is None:
+            return render_template('result.html',
+                                   prediction_text="❌ Model not loaded",
+                                   color="red",
+                                   score=0,
+                                   limits={})
+
         data = [float(x) for x in request.form.values()]
         final_input = np.array([data])
 
-        # Make prediction
         prediction = model.predict(final_input)
-
-        # Static confidence score (for display)
         probability = 80.0
 
-        # Result message
         if prediction[0] == 1:
             result = "✅ Water is Drinkable"
             color = "green"
@@ -51,7 +51,6 @@ def predict():
             result = "🚫 Water is Not Drinkable"
             color = "red"
 
-        # WHO Safe Limits
         safe_limits = {
             "pH": "6.5–8.5",
             "Hardness": "0–300 mg/L",
@@ -64,36 +63,30 @@ def predict():
             "Turbidity": "0–5 NTU"
         }
 
-        return render_template(
-            'result.html',
-            prediction_text=result,
-            color=color,
-            score=round(probability, 2),
-            limits=safe_limits
-        )
+        return render_template('result.html',
+                               prediction_text=result,
+                               color=color,
+                               score=round(probability, 2),
+                               limits=safe_limits)
 
     except Exception as e:
-        return render_template(
-            'result.html',
-            prediction_text=f"⚠️ Error Occurred: {str(e)}",
-            color="red",
-            score=0,
-            limits={}
-        )
-
+        return render_template('result.html',
+                               prediction_text=f"⚠️ Error Occurred: {str(e)}",
+                               color="red",
+                               score=0,
+                               limits={})
 
 # About Page
 @app.route('/about')
 def about():
     return render_template('about.html')
 
-
 # Contact Page
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
-# Contact Form Submission Route
-# Contact Form Submission Route (Full setup with CSV + Gmail)
+
+# Send Message
 @app.route('/send_message', methods=['POST'])
 def send_message():
     try:
@@ -101,44 +94,16 @@ def send_message():
         email = request.form['email']
         message = request.form['message']
 
-        # 1️⃣ Save message to CSV file
-        with open('contact_messages.csv', mode='a', newline='', encoding='utf-8') as file:
+        with open('contact_messages.csv', 'a', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             writer.writerow([name, email, message])
-        
 
-        # 2️⃣ Send email notification to Sonal
-        sender_email = "sonalpaswan011@gmail.com"  # temporary project email
-        receiver_email = "sonalpaswan011@gmail.com"
-        password = "dezq vbmf bxjj wxcn"
-        
-
-        subject = f"New Contact Message from {name}"
-        body = f"""
-        You have received a new message from your Water Quality Prediction Project.
-
-        👤 Name: {name}
-        📧 Email: {email}
-        💬 Message: {message}
-        """
-
-        msg = MIMEMultipart()
-        msg["From"] = sender_email
-        msg["To"] = receiver_email
-        msg["Subject"] = subject
-        msg.attach(MIMEText(body, "plain"))
-
-        # Gmail SMTP setup
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
-            server.starttls()
-            server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, msg.as_string())
-
-        return render_template('contact.html', success_message="✅ Message sent successfully and saved to record!")
+        return render_template('contact.html', success_message="✅ Message saved!")
 
     except Exception as e:
-        return render_template('contact.html', error_message=f"⚠️ Error occurred: {str(e)}")
-    # Admin Dashboard to view messages
+        return render_template('contact.html', error_message=str(e))
+
+# View Messages
 @app.route('/messages')
 def view_messages():
     messages = []
@@ -147,13 +112,17 @@ def view_messages():
             reader = csv.reader(file)
             for row in reader:
                 if row:
-                    messages.append({'name': row[0], 'email': row[1], 'message': row[2]})
+                    messages.append({
+                        'name': row[0],
+                        'email': row[1],
+                        'message': row[2]
+                    })
     except FileNotFoundError:
         pass
+
     return render_template('messages.html', messages=messages)
 
-
-
-# Run App
+# ✅ Run for Render
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
